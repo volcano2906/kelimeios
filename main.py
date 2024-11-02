@@ -104,9 +104,13 @@ if uploaded_file:
         unranked_keyword_counts.columns = ['Keyword', 'Count']
         top_10_unranked = unranked_keyword_counts.sort_values(by='Count', ascending=False).head(10)
         return top_10_unranked
-
+    
+    # Get the top 10 unranked keywords
     top_10_unranked_keywords = find_top_10_unranked_keywords(df)
-    for word, count in top_10_unranked_keywords:
+    
+    # Display each keyword and count in Streamlit
+    st.write("### Top 10 Most Common Unranked Keywords")
+    for word, count in top_10_unranked_keywords.values:
         st.write(f"{word}: {count}")
 
     # Display final DataFrame
