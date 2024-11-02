@@ -93,10 +93,19 @@ if uploaded_file:
             with col1:
                 st.write("### Input Fields")
                 Title = st.text_input("Title", "Simple Invoice maker Invoicer")
+                st.write(f"Character count: {len(Title)}")
+
                 Subtitle = st.text_input("Subtitle", "Make receipt Invoices")
+                st.write(f"Character count: {len(Subtitle)}")
+
                 KeywordField = st.text_input("Keyword Field", "free,generator,home,app,estimate,square,business,receipts")
+                st.write(f"Character count: {len(KeywordField)}")
+
                 KeywordField2 = st.text_input("Additional Keyword Field", "")
+                st.write(f"Character count: {len(KeywordField2)}")
+
                 tekTekelime = st.text_input("Single Word to Check", "invoice")
+                st.write(f"Character count: {len(tekTekelime)}")
 
                 # Update input_text_full from Title, Subtitle, and KeywordFields
                 input_text_full = f"{Title} {Subtitle} {KeywordField} {KeywordField2}"
