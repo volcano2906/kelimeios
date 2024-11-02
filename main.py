@@ -46,7 +46,6 @@ if uploaded_file:
     df['Missing Words(Not Title or Subtitle)'] = df.apply(find_missing_words, axis=1)
 
     # Input fields for text analysis
-    input_text = st.text_area("Enter text for keyword analysis", "Simple Invoice maker Invoicer Make receipt Invoices")
     Title = st.text_input("Title", "Simple Invoice maker Invoicer")
     Subtitle = st.text_input("Subtitle", "Make receipt Invoices")
     KeywordField = st.text_input("Keyword Field", "free,generator,home,app,estimate,square,business,receipts")
