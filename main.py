@@ -83,6 +83,4 @@ if uploaded_file:
         # Display processed data
         st.write("Processed Data:")
         st.dataframe(df)
-        download_button("Download Processed Data as Excel", data=excel_data, file_name="invoicer_with_occurrences.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        
         st.success("Analysis Complete!")
