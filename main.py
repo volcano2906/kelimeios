@@ -9,7 +9,8 @@ import pandas as pd
 from collections import Counter
 import re
 import streamlit as st
-
+# Set the page to wide layout
+st.set_page_config(page_title="Keyword Analysis Dashboard", layout="wide")
 st.title("Keyword Analysis Dashboard")
 
 # File uploader for Excel file input
