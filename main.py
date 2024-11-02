@@ -41,33 +41,28 @@ if uploaded_file:
         df['App Name'] = df['App Name'].astype(str)
         df['Subtitle'] = df['Subtitle'].astype(str)
         
-        # Function to find missing words
-        def find_missing_words(row):
-            keyword_words = row['Keyword'].lower().split()
-            app_name_words = row['App Name'].lower().split()
-            subtitle_words = row['Subtitle'].lower().split()
-            missing_words = [word for word in keyword_words if word not in app_name_words + subtitle_words]
-            return f"missing: {', '.join(missing_words)}" if missing_words else None
+        # Title and Subtitle input fields with character limits
+        title = st.text_input("Enter Title (max 30 characters)", max_chars=30)
+        subtitle = st.text_input("Enter Subtitle (max 30 characters)", max_chars=30)
         
-        # Apply the function and store results in a new column
-        df['Missing Words (Not Title or Subtitle)'] = df.apply(find_missing_words, axis=1)
+        # Two Keyword fields with max 100 characters each, separated by spaces or commas
+        keyword_input1 = st.text_input("Enter Keywords Set 1 (max 100 characters, separated by space or comma)", max_chars=100)
+        keyword_input2 = st.text_input("Enter Keywords Set 2 (max 100 characters, separated by space or comma)", max_chars=100)
         
-        # Input text for custom missing words analysis
-        input_text = st.text_area("Enter custom keywords for analysis", 
-                                  "Simple Invoice maker Invoicer Make receipt Invoices free,generator,home,app,estimate,square,business,receipts,contractor,foreman,instant,invoicing,tracker,easy,facturas,creator,manager,digital,factura,simple,")
-        
-        # Function to clean and find missing words from 'Keyword' based on input_text
-        def clean_and_find_missing_words(row, input_text):
+        # Combine the two keyword inputs, split by spaces or commas, and make a single list
+        input_keywords = re.split(r'[ ,]+', f"{keyword_input1} {keyword_input2}".strip().lower())
+
+        # Function to find missing words from 'Keyword' based on combined keywords from Title, Subtitle, and Keywords input
+        def clean_and_find_missing_words(row, input_keywords):
             cleaned_keyword = re.sub(r'[^a-zA-Z\s,]', '', row['Keyword']).lower()
             keyword_words = re.split(r'[,\s]+', cleaned_keyword)
-            input_words = re.split(r'[ ,]+', input_text.lower())
-            missing_words = [word for word in keyword_words if word and word not in input_words]
+            missing_words = [word for word in keyword_words if word and word not in input_keywords]
             if len(missing_words) == len(keyword_words):
                 return "all missing"
             return ', '.join(missing_words) if missing_words else None
         
         # Apply the function and store results in a new column
-        df['Missing Words from My Input'] = df.apply(lambda row: clean_and_find_missing_words(row, input_text), axis=1)
+        df['Missing Words from My Input'] = df.apply(lambda row: clean_and_find_missing_words(row, input_keywords), axis=1)
         
         # Text to check if present in keywords
         tekTekelime = st.text_input("Enter a word to check in Keyword column", "invoice")
@@ -83,4 +78,16 @@ if uploaded_file:
         # Display processed data
         st.write("Processed Data:")
         st.dataframe(df)
+        
+        # Option to download processed data as Excel
+        def convert_df_to_excel(df):
+            output = BytesIO()
+            with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+                df.to_excel(writer, index=False, sheet_name='Sheet1')
+            processed_data = output.getvalue()
+            return processed_data
+        
+        excel_data = convert_df_to_excel(df)
+        st.download_button("Download Processed Data as Excel", data=excel_data, file_name="invoicer_with_occurrences.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        
         st.success("Analysis Complete!")
