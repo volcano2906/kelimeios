@@ -18,9 +18,6 @@ uploaded_file = st.file_uploader("Upload your Excel file", type="xlsx")
 if uploaded_file:
     df = pd.read_excel(uploaded_file)
     
-    st.write("### Original Data")
-    st.dataframe(df.head())
-
     # Sort by Volume and Keyword
     df = df.sort_values(by=['Volume', 'Keyword'], ascending=[False, True])
 
