@@ -21,7 +21,7 @@ if uploaded_file:
     # Check for required columns
     required_columns = {"App Name", "Subtitle", "Keyword"}
     if not required_columns.issubset(df.columns):
-        st.error("The uploaded file must contain 'App Name', 'Subtitle', and 'Keyword' columns.")
+        st.error("Error")
     else:
         # Sort by Volume and Keyword
         df = df.sort_values(by=['Volume', 'Keyword'], ascending=[False, True])
