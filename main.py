@@ -41,33 +41,28 @@ if uploaded_file:
         df['App Name'] = df['App Name'].astype(str)
         df['Subtitle'] = df['Subtitle'].astype(str)
         
-        # Function to find missing words
-        def find_missing_words(row):
-            keyword_words = row['Keyword'].lower().split()
-            app_name_words = row['App Name'].lower().split()
-            subtitle_words = row['Subtitle'].lower().split()
-            missing_words = [word for word in keyword_words if word not in app_name_words + subtitle_words]
-            return f"missing: {', '.join(missing_words)}" if missing_words else None
+        # Title and Subtitle input fields with character limits
+        title = st.text_input("Enter Title (max 30 characters)", max_chars=30)
+        subtitle = st.text_input("Enter Subtitle (max 30 characters)", max_chars=30)
         
-        # Apply the function and store results in a new column
-        df['Missing Words (Not Title or Subtitle)'] = df.apply(find_missing_words, axis=1)
+        # Two Keyword fields with max 100 characters each, separated by spaces or commas
+        keyword_input1 = st.text_input("Enter Keywords Set 1 (max 100 characters, separated by space or comma)", max_chars=100)
+        keyword_input2 = st.text_input("Enter Keywords Set 2 (max 100 characters, separated by space or comma)", max_chars=100)
         
-        # Input field for custom text to find missing words from
-        input_text = st.text_area("Enter custom keywords (separated by commas or spaces) to analyze missing words:", 
-                                  "Simple Invoice maker Invoicer Make receipt Invoices free,generator,home,app,estimate,square,business,receipts,contractor,foreman,instant,invoicing,tracker,easy,facturas,creator,manager,digital,factura,simple,")
-        
-        # Function to clean and find missing words from 'Keyword' based on input_text
-        def clean_and_find_missing_words(row, input_text):
+        # Combine Title, Subtitle, and both keyword inputs, split by spaces or commas, to create a single list
+        input_keywords = re.split(r'[ ,]+', f"{title} {subtitle} {keyword_input1} {keyword_input2}".strip().lower())
+
+        # Function to find missing words from 'Keyword' based on combined keywords from Title, Subtitle, and Keywords input
+        def clean_and_find_missing_words(row, input_keywords):
             cleaned_keyword = re.sub(r'[^a-zA-Z\s,]', '', row['Keyword']).lower()
             keyword_words = re.split(r'[,\s]+', cleaned_keyword)
-            input_words = re.split(r'[ ,]+', input_text.lower())
-            missing_words = [word for word in keyword_words if word and word not in input_words]
+            missing_words = [word for word in keyword_words if word and word not in input_keywords]
             if len(missing_words) == len(keyword_words):
                 return "all missing"
             return ', '.join(missing_words) if missing_words else None
         
         # Apply the function and store results in a new column
-        df['Missing Words from My Input'] = df.apply(lambda row: clean_and_find_missing_words(row, input_text), axis=1)
+        df['Missing Words from My Input'] = df.apply(lambda row: clean_and_find_missing_words(row, input_keywords), axis=1)
         
         # Text input for checking a word's presence in 'Keyword'
         tekTekelime = st.text_input("Enter a word to check if it's present in the 'Keyword' column", "invoice")
