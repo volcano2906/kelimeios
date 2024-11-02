@@ -22,7 +22,7 @@ if uploaded_file:
     # Check for required columns
     required_columns = {"App Name", "Subtitle", "Keyword"}
     if not required_columns.issubset(df.columns):
-        st.error("The uploaded file must contain 'App Name', 'Subtitle', and 'Keyword' columns.")
+        st.error("Error")
     else:
         # Sort by Volume and Keyword
         df = df.sort_values(by=['Volume', 'Keyword'], ascending=[False, True])
@@ -92,7 +92,6 @@ if uploaded_file:
 
             with col1:
                 st.write("### Input Fields")
-                input_text = st.text_area("Enter text for keyword analysis", "Simple Invoice maker Invoicer Make receipt Invoices")
                 Title = st.text_input("Title", "Simple Invoice maker Invoicer")
                 Subtitle = st.text_input("Subtitle", "Make receipt Invoices")
                 KeywordField = st.text_input("Keyword Field", "free,generator,home,app,estimate,square,business,receipts")
