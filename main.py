@@ -10,16 +10,17 @@ from collections import Counter
 import re
 import streamlit as st
 
-# Title of the app
 st.title("Keyword Analysis Dashboard")
 
 # File uploader for Excel file input
 uploaded_file = st.file_uploader("Upload your Excel file", type="xlsx")
 
-# Process the file if uploaded
 if uploaded_file:
     df = pd.read_excel(uploaded_file)
     
+    st.write("### Original Data")
+    st.dataframe(df.head())
+
     # Sort by Volume and Keyword
     df = df.sort_values(by=['Volume', 'Keyword'], ascending=[False, True])
 
@@ -43,16 +44,17 @@ if uploaded_file:
         missing_words = [word for word in keyword_words if word not in app_name_words + subtitle_words]
         return f"missing: {', '.join(missing_words)}" if missing_words else None
 
-    df['Missing Words(Not Title or Subtitle)'] = df.apply(find_missing_words, axis=1)
+    df['Missing Words (Not Title or Subtitle)'] = df.apply(find_missing_words, axis=1)
 
     # Input fields for text analysis
+    input_text = st.text_area("Enter text for keyword analysis", "Simple Invoice maker Invoicer Make receipt Invoices")
     Title = st.text_input("Title", "Simple Invoice maker Invoicer")
     Subtitle = st.text_input("Subtitle", "Make receipt Invoices")
     KeywordField = st.text_input("Keyword Field", "free,generator,home,app,estimate,square,business,receipts")
     KeywordField2 = st.text_input("Additional Keyword Field", "")
     input_text_full = f"{Title} {Subtitle} {KeywordField} {KeywordField2}"
 
-    # Define function to clean and find missing words
+    # Function to clean and find missing words
     def clean_and_find_missing_words(row, input_text):
         cleaned_keyword = re.sub(r'[^a-zA-Z\s,]', '', row['Keyword']).lower()
         keyword_words = re.split(r'[,\s]+', cleaned_keyword)
@@ -96,7 +98,7 @@ if uploaded_file:
         st.write(f"{word}: {count}")
 
     # Function to find and display top unranked keywords
-    def find_and_print_top_10_unranked_keywords(df):
+    def find_top_10_unranked_keywords(df):
         unranked_keywords = df[df['Rank Status'] != 'ranked']['Keyword']
         unranked_keyword_counts = unranked_keywords.value_counts().reset_index()
         unranked_keyword_counts.columns = ['Keyword', 'Count']
@@ -104,11 +106,20 @@ if uploaded_file:
         return top_10_unranked
 
     st.write("### Top 10 Most Common Unranked Keywords")
-    top_10_unranked_keywords = find_and_print_top_10_unranked_keywords(df)
+    top_10_unranked_keywords = find_top_10_unranked_keywords(df)
     st.write(top_10_unranked_keywords)
 
     # Display final DataFrame
     st.write("### Final Processed Data")
     st.dataframe(df)
+
+    # Option to download the processed data as an Excel file
+    st.write("### Download Processed Data")
+    st.download_button(
+        label="Download Excel file",
+        data=df.to_excel(index=False),
+        file_name="processed_invoicer.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 else:
     st.write("Please upload an Excel file to begin.")
