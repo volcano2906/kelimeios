@@ -124,7 +124,7 @@ if uploaded_file:
                 # Updated function to check exact matches of multiple words in the 'Keyword' column
                 def check_exact_matches_in_keywords(df, text):
                     words_to_check = [word.strip().lower() for word in text.split(',')]
-                    df['Exact Matches in Keywords'] = df['Keyword'].apply(
+                    df['Matches in Keywords'] = df['Keyword'].apply(
                         lambda keyword: 1 if keyword.lower() in words_to_check else 0
                     )
                     return df
