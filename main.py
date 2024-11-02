@@ -83,7 +83,7 @@ if uploaded_file:
         with st.container():
             st.write("### Summary of Most Common Words")
             st.write(f"**Common Words in 'Keyword' Column**: {', '.join(most_common_keywords)}")
-            st.write(f"**Common Words in 'App name & subtitle"**: {', '.join(most_common_app_name_subtitle)}")
+            st.write(f"*Common Words in 'App name & subtitle**: {', '.join(most_common_app_name_subtitle)}")
             st.write(f"**Most Common Unranked Keywords**: {', '.join(top_10_unranked_keywords)}")
 
         # Second container: Two columns with input fields on the left and processed data on the right
