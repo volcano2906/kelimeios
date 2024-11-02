@@ -9,6 +9,7 @@ import pandas as pd
 from collections import Counter
 import re
 import streamlit as st
+
 # Set the page to wide layout
 st.set_page_config(page_title="Keyword Analysis Dashboard", layout="wide")
 st.title("Keyword Analysis Dashboard")
@@ -83,7 +84,7 @@ if uploaded_file:
         with st.container():
             st.write("### Summary of Most Common Words")
             st.write(f"**Common Words in 'Keyword' Column**: {', '.join(most_common_keywords)}")
-            st.write(f"*Common Words in 'App name & subtitle**: {', '.join(most_common_app_name_subtitle)}")
+            st.write(f"**Common Words in 'App Name' and 'Subtitle' Combinations**: {', '.join(most_common_app_name_subtitle)}")
             st.write(f"**Most Common Unranked Keywords**: {', '.join(top_10_unranked_keywords)}")
 
         # Second container: Two columns with input fields on the left and processed data on the right
@@ -104,7 +105,7 @@ if uploaded_file:
                 KeywordField2 = st.text_input("Additional Keyword Field", "")
                 st.write(f"Character count: {len(KeywordField2)}")
 
-                tekTekelime = st.text_input("Single Word to Check", "invoice")
+                tekTekelime = st.text_input("Single Word(s) to Check (comma-separated)", "invoice,receipt")
                 st.write(f"Character count: {len(tekTekelime)}")
 
                 # Update input_text_full from Title, Subtitle, and KeywordFields
@@ -120,13 +121,16 @@ if uploaded_file:
 
                 df['Missing Words from My Input'] = df.apply(lambda row: clean_and_find_missing_words(row, input_text_full), axis=1)
 
-                # Function to check if a word is in the 'Keyword' column
-                def check_text_in_keyword(df, text):
-                    df['Text in Keyword'] = df['Keyword'].apply(lambda keyword: 1 if text.lower() in str(keyword).lower() else 0)
+                # Updated function to check multiple words in the 'Keyword' column
+                def check_text_in_keywords(df, text):
+                    words_to_check = [word.strip().lower() for word in text.split(',')]
+                    df['Text in Keywords'] = df['Keyword'].apply(
+                        lambda keyword: 1 if any(word in keyword.lower() for word in words_to_check) else 0
+                    )
                     return df
 
-                # Apply the function to create the new column for single word check
-                df = check_text_in_keyword(df, tekTekelime)
+                # Apply the updated function to check for multiple words
+                df = check_text_in_keywords(df, tekTekelime)
 
             with col2:
                 st.write("### Final Processed Data")
