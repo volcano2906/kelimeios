@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Streamlit app for data analysis with keyword occurrence tracking.
-Created on Fri Oct 11 22:49:53 2024
-@author: volka
-"""
-
 import streamlit as st
 import pandas as pd
 import re
