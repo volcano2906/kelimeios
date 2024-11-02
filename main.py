@@ -83,16 +83,6 @@ if uploaded_file:
         # Display processed data
         st.write("Processed Data:")
         st.dataframe(df)
-        
-        # Option to download processed data as Excel
-        def convert_df_to_excel(df):
-            output = BytesIO()
-            with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-                df.to_excel(writer, index=False, sheet_name='Sheet1')
-            processed_data = output.getvalue()
-            return processed_data
-        
-        excel_data = convert_df_to_excel(df)
-        st.download_button("Download Processed Data as Excel", data=excel_data, file_name="invoicer_with_occurrences.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        download_button("Download Processed Data as Excel", data=excel_data, file_name="invoicer_with_occurrences.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
         
         st.success("Analysis Complete!")
