@@ -113,13 +113,5 @@ if uploaded_file:
     st.write("### Final Processed Data")
     st.dataframe(df)
 
-    # Option to download the processed data as an Excel file
-    st.write("### Download Processed Data")
-    st.download_button(
-        label="Download Excel file",
-        data=df.to_excel(index=False),
-        file_name="processed_invoicer.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
 else:
     st.write("Please upload an Excel file to begin.")
