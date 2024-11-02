@@ -66,7 +66,7 @@ if uploaded_file:
             return [word for word, _ in Counter(all_words).most_common(n)]
 
         # Most common words in 'App Name' and 'Subtitle' combinations
-        most_common_app_name_subtitle = most_common_words_in_unique_combinations(ranked_df, ['App Name', 'Subtitle'], n=5)
+        most_common_app_name_subtitle = most_common_words_in_unique_combinations(ranked_df, ['App Name', 'Subtitle'], n=10)
 
         # Function to find and display top unranked keywords
         def find_top_10_unranked_keywords(df):
@@ -82,9 +82,9 @@ if uploaded_file:
         # First container: Summary of most common words
         with st.container():
             st.write("### Summary of Most Common Words")
-            st.write(f"**Most Common Words in 'Keyword' Column**: {', '.join(most_common_keywords)}")
-            st.write(f"**Most Common Words in Unique 'App Name' and 'Subtitle' Combinations**: {', '.join(most_common_app_name_subtitle)}")
-            st.write(f"**Top 10 Most Common Unranked Keywords**: {', '.join(top_10_unranked_keywords)}")
+            st.write(f"**Common Words in 'Keyword' Column**: {', '.join(most_common_keywords)}")
+            st.write(f"**Common Words in 'App name & subtitle"**: {', '.join(most_common_app_name_subtitle)}")
+            st.write(f"**Most Common Unranked Keywords**: {', '.join(top_10_unranked_keywords)}")
 
         # Second container: Two columns with input fields on the left and processed data on the right
         with st.container():
