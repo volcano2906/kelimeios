@@ -121,16 +121,16 @@ if uploaded_file:
 
                 df['Missing Words from My Input'] = df.apply(lambda row: clean_and_find_missing_words(row, input_text_full), axis=1)
 
-                # Updated function to check multiple words in the 'Keyword' column
-                def check_text_in_keywords(df, text):
+                # Updated function to check exact matches of multiple words in the 'Keyword' column
+                def check_exact_matches_in_keywords(df, text):
                     words_to_check = [word.strip().lower() for word in text.split(',')]
-                    df['Text in Keywords'] = df['Keyword'].apply(
-                        lambda keyword: 1 if any(word in keyword.lower() for word in words_to_check) else 0
+                    df['Exact Matches in Keywords'] = df['Keyword'].apply(
+                        lambda keyword: 1 if keyword.lower() in words_to_check else 0
                     )
                     return df
 
-                # Apply the updated function to check for multiple words
-                df = check_text_in_keywords(df, tekTekelime)
+                # Apply the updated function to check for exact matches
+                df = check_exact_matches_in_keywords(df, tekTekelime)
 
             with col2:
                 st.write("### Final Processed Data")
