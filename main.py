@@ -39,7 +39,7 @@ if uploaded_file:
         # Ensure 'App Name' and 'Subtitle' columns are strings
         df['App Name'] = df['App Name'].astype(str)
         df['Subtitle'] = df['Subtitle'].astype(str)
-
+        df.insert(df.columns.get_loc("Rank Status") + 1, "Keyword Copy", df["Keyword"])
         # Define a function to find missing words in 'App Name' and 'Subtitle'
         def find_missing_words(row):
             keyword_words = row['Keyword'].lower().split()
