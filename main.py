@@ -105,14 +105,11 @@ if uploaded_file:
                 KeywordField2 = st.text_input("Additional Keyword Field", "")
                 st.write(f"Character count: {len(KeywordField2)}")
 
-                KeywordField3 = st.text_input("Additional Keyword Field", "")
-                st.write(f"Character count: {len(KeywordField3)}")
-
                 tekTekelime = st.text_input("Single Word(s) to Check (comma-separated)", "invoice,receipt")
                 st.write(f"Character count: {len(tekTekelime)}")
 
                 # Update input_text_full from Title, Subtitle, and KeywordFields
-                input_text_full = f"{Title} {Subtitle} {KeywordField} {KeywordField2} {KeywordField3}"
+                input_text_full = f"{Title} {Subtitle} {KeywordField} {KeywordField2}"
 
                 # Function to clean and find missing words from input text
                 def clean_and_find_missing_words(row, input_text):
