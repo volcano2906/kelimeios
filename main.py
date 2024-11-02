@@ -25,6 +25,10 @@ if uploaded_file:
     if not required_columns.issubset(df.columns):
         st.error("Error")
     else:
+        # Clean non-alphabetic characters from 'App Name' and 'Subtitle' columns
+        df['App Name'] = df['App Name'].astype(str).apply(lambda x: re.sub(r'[^a-zA-Z\s]', '', x))
+        df['Subtitle'] = df['Subtitle'].astype(str).apply(lambda x: re.sub(r'[^a-zA-Z\s]', '', x))
+
         # Sort by Volume and Keyword
         df = df.sort_values(by=['Volume', 'Keyword'], ascending=[False, True])
 
@@ -37,9 +41,8 @@ if uploaded_file:
         df = df.merge(keyword_counts, on='Keyword', how='left')
 
         # Ensure 'App Name' and 'Subtitle' columns are strings
-        df['App Name'] = df['App Name'].astype(str)
-        df['Subtitle'] = df['Subtitle'].astype(str)
         df.insert(df.columns.get_loc("Rank Status") + 1, "Keyword Copy", df["Keyword"])
+        
         # Define a function to find missing words in 'App Name' and 'Subtitle'
         def find_missing_words(row):
             keyword_words = row['Keyword'].lower().split()
