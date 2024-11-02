@@ -1,6 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+Streamlit app for data analysis with keyword occurrence tracking.
+Created on Fri Oct 11 22:49:53 2024
+@author: volka
+"""
+
 import streamlit as st
 import pandas as pd
 import re
+from io import BytesIO
 
 # Streamlit app title
 st.title("Keyword Occurrence and Missing Words Analysis")
@@ -77,9 +85,12 @@ if uploaded_file:
         st.dataframe(df)
         
         # Option to download processed data as Excel
-        @st.cache_data
         def convert_df_to_excel(df):
-            return df.to_excel(index=False, engine='xlsxwriter')
+            output = BytesIO()
+            with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+                df.to_excel(writer, index=False, sheet_name='Sheet1')
+            processed_data = output.getvalue()
+            return processed_data
         
         excel_data = convert_df_to_excel(df)
         st.download_button("Download Processed Data as Excel", data=excel_data, file_name="invoicer_with_occurrences.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
