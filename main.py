@@ -107,7 +107,8 @@ if uploaded_file:
 
     st.write("### Top 10 Most Common Unranked Keywords")
     top_10_unranked_keywords = find_top_10_unranked_keywords(df)
-    st.write(top_10_unranked_keywords)
+    for word, count in top_10_unranked_keywords:
+        st.write(f"{word}: {count}")
 
     # Display final DataFrame
     st.write("### Final Processed Data")
