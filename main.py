@@ -49,10 +49,10 @@ if uploaded_file:
         keyword_input1 = st.text_input("Enter Keywords Set 1 (max 100 characters, separated by space or comma)", max_chars=100)
         keyword_input2 = st.text_input("Enter Keywords Set 2 (max 100 characters, separated by space or comma)", max_chars=100)
         
-        # Combine the two keyword inputs, split by spaces or commas, and make a single list
+        # Combine and split keywords from both inputs, split by spaces or commas
         input_keywords = re.split(r'[ ,]+', f"{keyword_input1} {keyword_input2}".strip().lower())
 
-        # Function to find missing words from 'Keyword' based on combined keywords from Title, Subtitle, and Keywords input
+        # Function to clean and find missing words from 'Keyword' based on combined keywords from Title, Subtitle, and Keywords input
         def clean_and_find_missing_words(row, input_keywords):
             cleaned_keyword = re.sub(r'[^a-zA-Z\s,]', '', row['Keyword']).lower()
             keyword_words = re.split(r'[,\s]+', cleaned_keyword)
